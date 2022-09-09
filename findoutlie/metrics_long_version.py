@@ -26,16 +26,14 @@ def dvars(img):
     data = img.get_fdata()
 
     #calculate
-    n_voxels = np.prod(data.shape[:-1])
-    n_vols = data.shape[-1]
-    data_array = data.reshape(n_voxels, n_vols)
+    dvars = []
+    for i in range(1, data.shape[-1]):
+        vol_diff = data[..., i] - data[..., i - 1]
+        dvar_val = np.sqrt(np.mean(vol_diff ** 2))
+        dvars.append(dvar_val)
 
-    vol_diff = np.diff(data_array, axis = 1)
-    dvals = np.sqrt(np.mean(vol_diff**2, axis = 0))
-
+    dvals = np.array(dvars)
     return(dvals)
-
-
 
 
     # Hint: remember 'axis='.  For example:
