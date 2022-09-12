@@ -2,7 +2,7 @@
 
 Run as:
 
-    python3 scripts/validate_data.py
+    python3 scripts/validate_data1.py
 """
 
 from pathlib import Path
@@ -24,9 +24,14 @@ def file_hash(filename):
     """
     # Open the file, read contents as bytes.
     # Calculate, return SHA1 has on the bytes from the file.
+    # LAB(begin solution)
+    contents = Path(filename).read_bytes()
+    return hashlib.sha1(contents).hexdigest()
+    # LAB(replace solution)
     # This is a placeholder, replace it to write your solution.
     raise NotImplementedError(
         'This is just a template -- you are expected to code this.')
+    # LAB(end solution)
 
 
 def validate_data(data_directory):
@@ -52,9 +57,25 @@ def validate_data(data_directory):
     # Calculate actual hash for given filename.
     # If hash for filename is not the same as the one in the file, raise
     # ValueError
+    # LAB(begin solution)
+    data_path = Path(data_directory)
+    group_path = data_path.parent
+    hash_text = (data_path / 'hash_list.txt').read_text()
+    for line in hash_text.splitlines():
+        # Split into SHA1 hash and filename
+        hash, filename = line.strip().split()
+        # Calculate actual hash for given filename.
+        actual_hash = file_hash(group_path / filename)
+        # If hash for filename is not the same as the one in the file, raise
+        # ValueError
+        if hash != actual_hash:
+            raise ValueError(f"Hash for {filename} does not match")
+    return
+    # LAB(replace solution)
     # This is a placeholder, replace it to write your solution.
     raise NotImplementedError(
         'This is just a template -- fill out the template with code.')
+    # LAB(end solution)
 
 
 def main():
